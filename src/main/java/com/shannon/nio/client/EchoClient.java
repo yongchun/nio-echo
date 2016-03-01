@@ -39,7 +39,7 @@ public class EchoClient {
 
             //  http://blog.csdn.net/anders_zhuo/article/details/8546604
             //  http://book.51cto.com/art/200902/109752.htm
-            socketChannel.connect(new InetSocketAddress(host, port)); // 连接服务，这一处需要注意
+            socketChannel.connect(new InetSocketAddress(host, port)); // 连接服务，因为设置了为非阻塞模式，这是一个异步的
 
 
             // 向Reactor线程的多路服用器注册OP_CONNECT事件
