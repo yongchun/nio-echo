@@ -24,11 +24,11 @@ public class EchoServer {
     public EchoServer(String host, int port, AbstractMessageHandler messageHandler) {
 
         try {
-            reactor = new EchoReactor(messageHandler);
+            reactor = new EchoReactor(messageHandler); // 初始化reactor线程
 
-            serverSocketChannel = ServerSocketChannel.open(); // 初始化reactor线程
-            serverSocketChannel.socket().setReuseAddress(Boolean.TRUE); // 打开ServerSocketChannel
-            serverSocketChannel.configureBlocking(Boolean.FALSE);  // serverSocketChannel
+            serverSocketChannel = ServerSocketChannel.open(); // 打开ServerSocketChannel
+            serverSocketChannel.socket().setReuseAddress(Boolean.TRUE);
+            serverSocketChannel.configureBlocking(Boolean.FALSE);  // 设置serverSocketChannel为非阻塞
 
             serverSocketChannel.bind(new InetSocketAddress(host, port)); // 绑定监听地址和端口
 
