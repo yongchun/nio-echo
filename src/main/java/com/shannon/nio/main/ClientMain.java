@@ -18,8 +18,7 @@ public class ClientMain {
         AbstractMessageHandler handler = new ClientMessageHandler();
         handler.setContent(content);
 
-        EchoClient echoClient = new EchoClient("127.0.0.1", 8002, handler);
+        EchoClient echoClient = new EchoClient("127.0.0.1", 8003, handler);
         echoClient.start();
-        // echoClient.stop();
     }
 }

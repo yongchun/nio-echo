@@ -34,5 +34,8 @@ public abstract class AbstractMessageHandler implements MessageHandler {
             read(selectionKey);
         }
 
+        if (selectionKey.isWritable()) {
+            write(selectionKey);
+        }
     }
 }

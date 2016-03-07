@@ -24,6 +24,13 @@ public interface MessageHandler {
 
     /**
      * @param selectionKey 处理注册在{@link java.nio.channels.Selector}上的
+     *                     {@link java.nio.channels.Channel}的{@linkplain SelectionKey#OP_WRITE}的事件
+     */
+    void write(SelectionKey selectionKey) throws Exception;
+
+
+    /**
+     * @param selectionKey 处理注册在{@link java.nio.channels.Selector}上的
      *                     {@link java.nio.channels.Channel}的{@linkplain SelectionKey#OP_CONNECT}的事件
      */
     void connect(SelectionKey selectionKey) throws Exception;

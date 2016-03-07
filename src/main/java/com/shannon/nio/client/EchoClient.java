@@ -53,12 +53,8 @@ public class EchoClient {
 
     }
 
-    public void stop() {
-        reactor.stop();
-    }
 
     public void start() {
         reactor.run();
-
     }
 }

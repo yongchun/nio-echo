@@ -42,10 +42,6 @@ public class EchoServer {
         LOGGER.info("server start up");
     }
 
-    public void stop() {
-        reactor.stop();
-    }
-
     public void start() {
         reactor.run();
     }

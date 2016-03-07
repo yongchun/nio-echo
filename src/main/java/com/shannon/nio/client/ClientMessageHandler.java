@@ -11,11 +11,12 @@ import com.shannon.nio.AbstractMessageHandler;
 
 /**
  * Created by Shannon,chen on 16/2/29.
- *
+ * <p/>
  * 客户端处理
  */
 public class ClientMessageHandler extends AbstractMessageHandler {
     private final static Logger LOGGER = LoggerFactory.getLogger(ClientMessageHandler.class.getName());
+    private volatile boolean isWrite = Boolean.FALSE;
 
     @Override
     public void accept(SelectionKey selectionKey) throws Exception {
@@ -33,7 +34,7 @@ public class ClientMessageHandler extends AbstractMessageHandler {
             readBuffer.get(bytes);
             String body = new String(bytes, "UTF-8");
 
-            LOGGER.info("the response receive from server is :" + body);
+            LOGGER.info("the echo cli  receive response from server is :" + body);
 
         } else if (readBytes < 0) {
             selectionKey.cancel();
@@ -43,8 +44,6 @@ public class ClientMessageHandler extends AbstractMessageHandler {
         }
     }
 
-
-
     @Override
     public void connect(SelectionKey selectionKey) throws Exception {
         SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
@@ -52,29 +51,30 @@ public class ClientMessageHandler extends AbstractMessageHandler {
         while (!socketChannel.finishConnect()) { // 必须等待连接完全建立,才能写数据
             // 否则MessageHandler处理的时候会抛{@link NotYetConnectedException}异常
         }
-
-        doWrite(selectionKey);
-
-        socketChannel.register(selectionKey.selector(), SelectionKey.OP_READ);
+        socketChannel.register(selectionKey.selector(), SelectionKey.OP_WRITE);
 
     }
 
-    private void doWrite(SelectionKey selectionKey) throws Exception {
+    @Override
+    public void write(SelectionKey selectionKey) throws Exception {
         SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
 
-        byte[] requestBytes = getContent().getBytes();
-        ByteBuffer writerBuffer = ByteBuffer.allocate(requestBytes.length);
-        writerBuffer.put(requestBytes);
-        writerBuffer.flip();
+        if (!isWrite) {
+            byte[] requestBytes = getContent().getBytes();
+            ByteBuffer writerBuffer = ByteBuffer.allocate(requestBytes.length);
+            writerBuffer.put(requestBytes);
+            writerBuffer.flip();
+            isWrite = Boolean.TRUE;
+            socketChannel.write(writerBuffer);
 
-        socketChannel.write(writerBuffer);
-
-        if (!writerBuffer.hasRemaining()) {
-            LOGGER.info("Send 2 Server Success");
+            if (!writerBuffer.hasRemaining()) {
+                LOGGER.info("the echo cli send reques :" + getContent());
+            } else {
+                // todo
+            }
         } else {
-            // todo
+            socketChannel.register(selectionKey.selector(), SelectionKey.OP_READ);
         }
-
     }
 
 }
