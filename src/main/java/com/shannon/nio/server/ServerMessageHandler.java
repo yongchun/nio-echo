@@ -72,9 +72,9 @@ public class ServerMessageHandler extends AbstractMessageHandler {
             writerBuffer.flip();
             this.isWrite = Boolean.TRUE;
             LOGGER.info("The echo server send response :" + JSON.toJSONString(echoRequest));
-            sc.write(writerBuffer);
+            sc.write(writerBuffer); // iswrite=true
         } else {
-            selectionKey.cancel();
+            // do nothing 跳出服务端循环
         }
     }
 
